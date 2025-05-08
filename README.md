@@ -1,45 +1,101 @@
-# nanoAOD producer customized for BPH analysis 
+# Setup para Análise de BPhysics com NanoAOD no CMSSW_15_1_0_pre2
 
-The focus is on B -> mumu X analyses.
-Based on the code of RK 2018 (BParkingNano)
+## 🔧 Passo a passo
 
-## Getting started
+### 1. Criar área do CMSSW
 
-```shell
-cmsrel CMSSW_15_1_X
-cd CMSSW_15_1_X/src
+```bash
+cmsrel CMSSW_15_1_0_pre2
+cd CMSSW_15_1_0_pre2/src/
 cmsenv
-git cms-init
 ```
-Architecture should be el8 or el9
 
-## Add the BPHNano package and build everything
+> ⚠️ Aviso: Essa versão pode não ter suporte de produção para `el9_amd64_gcc12`.
 
-```shell
+---
+
+### 2. Adicionar pacotes necessários
+
+```bash
+git cms-addpkg Configuration/PyReleaseValidation/
+git cms-addpkg DataFormats/PatCandidates/
+git cms-addpkg TrackingTools/TransientTrack
+```
+
+---
+
+### 3. Clonar o repositório com os scripts da análise
+
+```bash
 git clone -b cmsDriver_command git@github.com:gmelachr/BPHNano.git ./PhysicsTools
-git cms-addpkg PhysicsTools/NanoAOD 
-scram b -j 8 
+git cms-addpkg PhysicsTools/NanoAOD
 ```
-or https equivalent
 
-## To run on a test file
+---
 
-```shell
+### 4. Copiar arquivos modificados de um repositório público
+
+```bash
+# TrackingTools
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes* TrackingTools/TransientTrack/src/
+
+# DataFormats
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes_def_objects.xml DataFormats/PatCandidates/src/
+
+# Configuration
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/relval_nano.py Configuration/PyReleaseValidation/python/
+
+# PhysicsTools/NanoAOD plugins
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/CandMCMatchTableProducer.cc PhysicsTools/NanoAOD/plugins/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/SimpleFlatTableProducerPlugins.cc PhysicsTools/NanoAOD/plugins/
+
+# Python files para NanoAOD
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/autoNANO.py PhysicsTools/NanoAOD/python/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/custom_bph_cff.py PhysicsTools/NanoAOD/python/
+```
+
+---
+
+### 5. Navegar até o diretório de teste
+
+```bash
 cd PhysicsTools/BPHNano/test/
-cmsenv 
+cmsenv
+```
+
+---
+
+### 6. Inicializar proxy para acesso ao GRID (opcional, mas necessário para datasets externos)
+
+```bash
+voms-proxy-init --rfc --voms cms
+```
+
+> Após digitar sua senha do GRID, você verá uma confirmação:
+>
+> ```
+> Created proxy in /tmp/x509up_uXXXXXX.
+> Your proxy is valid until [data/hora].
+> ```
+
+---
+
+### 7. Executar o job para MC
+
+```bash
 cmsRun run_bphNano_cfg.py
 ```
 
-## cmsDriver command
-```shell
+Esse comando inicia o processamento do NanoAOD customizado. Certifique-se de que os arquivos de entrada no `run_bphNano_cfg.py` estão corretos.
 
-Data: cmsDriver.py --conditions 140X_dataRun3_Prompt_v4 --datatier NANOAOD --data --era Run3,run3_nanoAOD_pre142X --eventcontent NANOAOD --filein root://cms-xrd-global.cern.ch//store/data/Run2024C/ParkingDoubleMuonLowMass0/MINIAOD/PromptReco-v1/000/379/416/00000/0134a8bc-c8d4-400e-9508-2a4b222c5431.root --fileout file:/tmp/gmelachr/BPH_test_data.root --nThreads 4 -n 4500 --no_exec --python_filename BPH_test.py --scenario pp --step NANO:@BPH
+---
 
-MC: cmsDriver.py --conditions 130X_mcRun3_2023_realistic_v14 --datatier NANOAOD --era Run3_2023,run3_nanoAOD_pre142X --eventcontent NANOAODSIM --filein root://cms-xrd-global.cern.ch//store/mc/Run3Summer23MiniAODv4/ButoJpsiK_Jpsito2Mu_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/130X_mcRun3_2023_realistic_v14-v3/2820000/14c41e05-3e09-4255-86aa-201b687345a7.root --fileout file:/tmp/gmelachr/BPH_mc.root --nThreads 4 -n -1 --no_exec --python_filename BPH_MC.py --scenario pp --step NANO:@BPH --mc
+### 8. Executar o job para dados
 
-#era modifier run3_nanoAOD_pre142X required in order to run in CMSSW_15_X miniAODs produced with CMSSW_14 or previous releases 
+```bash
+cmsRun run_bphNano_cfg.py isMC=False
 ```
 
+Esse comando inicia o processamento do NanoAOD customizado. Certifique-se de que os arquivos de entrada no `run_bphNano_cfg.py` estão corretos.
 
-
-
+---
