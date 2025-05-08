@@ -1,4 +1,4 @@
-# Setup para Análise de BPhysics com NanoAOD no CMSSW_15_1_0_pre2
+# Setup para Análise de B-Physics NanoAOD 
 
 ## 🔧 Passo a passo
 
@@ -9,9 +9,6 @@ cmsrel CMSSW_15_1_0_pre2
 cd CMSSW_15_1_0_pre2/src/
 cmsenv
 ```
-
-> ⚠️ Aviso: Essa versão pode não ter suporte de produção para `el9_amd64_gcc12`.
-
 ---
 
 ### 2. Adicionar pacotes necessários
