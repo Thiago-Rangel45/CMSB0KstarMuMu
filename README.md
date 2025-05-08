@@ -62,7 +62,7 @@ cmsenv
 
 ---
 
-### 6. Inicializar proxy para acesso ao GRID (opcional, mas necessário para datasets externos)
+### 6. Inicializar proxy para acesso ao GRID 
 
 ```bash
 voms-proxy-init --rfc --voms cms
