@@ -33,29 +33,19 @@ git cms-addpkg PhysicsTools/NanoAOD
 ### 4. Copiar arquivos modificados de um repositório público
 
 ```bash
-# TrackingTools
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes* TrackingTools/TransientTrack/src/
-
-# DataFormats
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes_def_objects.xml DataFormats/PatCandidates/src/
-
-# Configuration
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/relval_nano.py Configuration/PyReleaseValidation/python/
-
-# PhysicsTools/NanoAOD plugins
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/CandMCMatchTableProducer.cc PhysicsTools/NanoAOD/plugins/
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/SimpleFlatTableProducerPlugins.cc PhysicsTools/NanoAOD/plugins/
-
-# Python files para NanoAOD
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/autoNANO.py PhysicsTools/NanoAOD/python/
-cp /afs/cern.ch/user/g/gmelachr/public/forDiego/custom_bph_cff.py PhysicsTools/NanoAOD/python/
-```
-
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes* /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/TrackingTools/TransientTrack/src/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes_def_objects.xml /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/DataFormats/PatCandidates/src/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/relval_nano.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/Configuration/PyReleaseValidation/python/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/CandMCMatchTableProducer.cc /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/plugins/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/SimpleFlatTableProducerPlugins.cc /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/plugins/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/autoNANO.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
+cp /afs/cern.ch/user/g/gmelachr/public/forDiego/custom_bph_cff.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
 ---
 
-### 5. Navegar até o diretório de teste
+### 5. Compilar e navegar até o diretório de teste
 
 ```bash
+scram b -j8
 cd PhysicsTools/BPHNano/test/
 cmsenv
 ```
