@@ -32,6 +32,8 @@ git cms-addpkg PhysicsTools/NanoAOD
 
 ### 4. Copiar arquivos modificados de um repositório público
 
+Não se esqueça de mudar para o caminho do seu diretório na lxplus.
+
 ```bash
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes* /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/TrackingTools/TransientTrack/src/
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes_def_objects.xml /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/DataFormats/PatCandidates/src/
