@@ -41,6 +41,7 @@ cp /afs/cern.ch/user/g/gmelachr/public/forDiego/SimpleFlatTableProducerPlugins.c
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/autoNANO.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/custom_bph_cff.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
 ---
+```
 
 ### 5. Compilar e navegar até o diretório de teste
 
