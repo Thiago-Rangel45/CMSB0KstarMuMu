@@ -1,17 +1,17 @@
-# Setup para Análise de B-Physics NanoAOD 
 
-## 🔧 Passo a passo
+## Step-by-Step for B-Physics NanoAOD Analysis
 
-### 1. Criar área do CMSSW
+### 1. Create the CMSSW area
 
 ```bash
 cmsrel CMSSW_15_1_0_pre2
 cd CMSSW_15_1_0_pre2/src/
 cmsenv
 ```
+
 ---
 
-### 2. Adicionar pacotes necessários
+### 2. Add the required packages
 
 ```bash
 git cms-addpkg Configuration/PyReleaseValidation/
@@ -21,7 +21,7 @@ git cms-addpkg TrackingTools/TransientTrack
 
 ---
 
-### 3. Clonar o repositório com os scripts da análise
+### 3. Clone the repository with the analysis scripts
 
 ```bash
 git clone -b cmsDriver_command git@github.com:gmelachr/BPHNano.git ./PhysicsTools
@@ -30,9 +30,9 @@ git cms-addpkg PhysicsTools/NanoAOD
 
 ---
 
-### 4. Copiar arquivos modificados de um repositório público
+### 4. Copy modified files from a public repository
 
-Não se esqueça de mudar para o caminho do seu diretório na lxplus.
+> **Note:** Replace the user path with your own on lxplus.
 
 ```bash
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/classes* /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/TrackingTools/TransientTrack/src/
@@ -42,10 +42,11 @@ cp /afs/cern.ch/user/g/gmelachr/public/forDiego/CandMCMatchTableProducer.cc /afs
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/SimpleFlatTableProducerPlugins.cc /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/plugins/
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/autoNANO.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
 cp /afs/cern.ch/user/g/gmelachr/public/forDiego/custom_bph_cff.py /afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0_pre2/src/PhysicsTools/NanoAOD/python/
----
 ```
 
-### 5. Compilar e navegar até o diretório de teste
+---
+
+### 5. Compile and move to the test directory
 
 ```bash
 scram b -j8
@@ -55,37 +56,37 @@ cmsenv
 
 ---
 
-### 6. Inicializar proxy para acesso ao GRID 
+### 6. Initialize proxy to access the GRID
 
 ```bash
 voms-proxy-init --rfc --voms cms
 ```
 
-> Após digitar sua senha do GRID, você verá uma confirmação:
+> After entering your GRID password, you should see confirmation like:
 >
 > ```
 > Created proxy in /tmp/x509up_uXXXXXX.
-> Your proxy is valid until [data/hora].
+> Your proxy is valid until [date/time].
 > ```
 
 ---
 
-### 7. Executar o job para MC
+### 7. Run the job for MC
 
 ```bash
 cmsRun run_bphNano_cfg.py
 ```
 
-Esse comando inicia o processamento do NanoAOD customizado. Certifique-se de que os arquivos de entrada no `run_bphNano_cfg.py` estão corretos.
+This command starts the customized NanoAOD processing. Make sure the input files listed in `run_bphNano_cfg.py` are correct.
 
 ---
 
-### 8. Executar o job para dados
+### 8. Run the job for data
 
 ```bash
 cmsRun run_bphNano_cfg.py isMC=False
 ```
 
-Esse comando inicia o processamento do NanoAOD customizado. Certifique-se de que os arquivos de entrada no `run_bphNano_cfg.py` estão corretos.
+This command also starts the customized NanoAOD processing, but for real data. Again, ensure the input files are correctly specified in `run_bphNano_cfg.py`.
 
 ---
