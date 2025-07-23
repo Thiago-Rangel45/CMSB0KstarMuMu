@@ -45,6 +45,24 @@ voms-proxy-init --rfc --voms cms
 
 ---
 
+Remove the 'tauID('byVVVLooseDeepTau2018v2p5VSjet')' in the PhysicsTools/NanoAOD/python/custom_bph_cff.py and since we are only interested in B to 2 Trackes and pair of muons we can comment the:
+
+```
+from PhysicsTools.NanoAOD.custom_bph_cff import nanoAOD_customizeBPH 
+#process = nanoAOD_customizeBPH(process)
+```
+
+and add:
+
+```
+from PhysicsTools.NanoAOD.custom_bph_cff import *
+process = nanoAOD_customizeMuonBPH(process)
+process = nanoAOD_customizeDiMuonBPH(process)
+process = nanoAOD_customizeTrackBPH(process)
+process = nanoAOD_customizeBToTrkTrkLL(process)
+```
+
+
 ### 5. Run the job for MC
 
 ```bash
