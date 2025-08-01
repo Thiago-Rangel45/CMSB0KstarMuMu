@@ -110,7 +110,7 @@ process = nanoAOD_customizeTrackBPH(process)
 process = nanoAOD_customizeBToTrkTrkLL(process)
 ```
 
-This reduces the output content to only what's necessary for typical B→μμ and B→hh analyses.
+This reduces the output content to only what's necessary for typical B→hhμμ analyse.
 
 ---
 
