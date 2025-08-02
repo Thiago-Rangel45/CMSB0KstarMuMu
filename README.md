@@ -92,26 +92,6 @@ PhysicsTools/NanoAOD/python/custom_bph_cff.py
 ```python
 tauID('byVVVLooseDeepTau2018v2p5VSjet'),
 ```
-
-- **Replace** the default customization:
-
-```python
-from PhysicsTools.NanoAOD.custom_bph_cff import nanoAOD_customizeBPH 
-#process = nanoAOD_customizeBPH(process)
-```
-
-with a **more focused customization** (only muons, dimuons, tracks, and B→hh decays):
-
-```python
-from PhysicsTools.NanoAOD.custom_bph_cff import *
-process = nanoAOD_customizeMuonBPH(process)
-process = nanoAOD_customizeDiMuonBPH(process)
-process = nanoAOD_customizeTrackBPH(process)
-process = nanoAOD_customizeBToTrkTrkLL(process)
-```
-
-This reduces the output content to only what's necessary for typical B→hhμμ analyse.
-
 ---
 
 ### 7. Run the job
