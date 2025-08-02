@@ -81,7 +81,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         dataTier = cms.untracked.string('NANOAOD'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:BPH_NANO.root'),
+    fileName = cms.untracked.string('file:BPH_MC.root'),
     outputCommands = process.NANOAODSIMEventContent.outputCommands
 )
 

@@ -39,6 +39,7 @@ namespace bph {
   constexpr float PROT_SIGMA = 0.000016;
   constexpr float MUON_MASS = 0.10565837;
   constexpr float ELECTRON_MASS = 0.000511;
+  constexpr float KSTAR_PDG_MASS = 0.89555;
 
   inline std::pair<float, float> min_max_dr(const std::vector<edm::Ptr<reco::Candidate>>& cands) {
     float min_dr = std::numeric_limits<float>::max();
