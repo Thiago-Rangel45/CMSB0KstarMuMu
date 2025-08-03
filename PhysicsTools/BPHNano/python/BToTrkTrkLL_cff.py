@@ -137,7 +137,10 @@ BToTrkTrkMuMuTable = cms.EDProducer(
         trk1_dcaSig = Var("userFloat('trk1_dcaSig')", float, doc = "leading track DCA significance wrt beamspot"),
         trk2_dca = Var("userFloat('trk2_dca')", float, doc = "subleading track DCA wrt beamspot"),
         trk2_dcaErr = Var("userFloat('trk2_dcaErr')", float, doc = "subleading track DCA uncertainty wrt beamspot"),
-        trk2_dcaSig = Var("userFloat('trk2_dcaSig')", float, doc = "subleading track DCA significance wrt beamspot")
+        trk2_dcaSig = Var("userFloat('trk2_dcaSig')", float, doc = "subleading track DCA significance wrt beamspot"),
+        cos_theta_l = Var("userFloat('cos_theta_l')", float, doc = "cossine of the angle between the direction of the positive lepton and the direction opposite that of the B0"),
+        cos_theta_k = Var("userFloat('cos_theta_k')", float, doc = "cossine of the angle between the direction of the kaon and the direction opposite that of the B0"),
+        phi_angle = Var("userFloat('phi_angle')", float, doc = "angle between the plane containing the muons and the plane containing the kaon and the pion from the K star decay")
     )
 )
 
