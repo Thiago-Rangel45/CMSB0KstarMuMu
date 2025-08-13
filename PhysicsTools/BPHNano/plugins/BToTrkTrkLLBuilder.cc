@@ -134,26 +134,64 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
       cand.addUserInt("l2_idx", l2_idx);
       cand.addUserInt("trk1_idx", trk1_idx);
       cand.addUserInt("trk2_idx", trk2_idx);
-      //      cand.addUserInt("ditrack_idx", ditracks_idx); this index corresponds to the ditrack collection.
-      //      However, in order to refuce the event size, we do not store all the ditrack candidates but only those used to build a B candidate.
-      //      So, now, index of B candidate is the same number for index of ditrack candidate
-      //      This variable is not removed from the code in case we decide to store in the future all the ditrack candidates.
+    //cand.addUserInt("ditrack_idx", ditracks_idx); this index corresponds to the ditrack collection.
       cand.addUserInt("ll_idx", ll_idx);
 
+      // Lepton 1 (l1)
+      int charge_l1 = l1_ptr->charge();
       auto lep1_p4 = l1_ptr->polarP4();
-      auto lep2_p4 = l2_ptr->polarP4();
       lep1_p4.SetM(l1_ptr->mass());
+      float pt_l1 = lep1_p4.Pt();
+      float eta_l1 = lep1_p4.Eta();
+      float phi_l1 = lep1_p4.Phi();
+      cand.addUserInt("charge_l1", charge_l1);
+      cand.addUserFloat("pt_l1", pt_l1);
+      cand.addUserFloat("eta_l1", eta_l1);
+      cand.addUserFloat("phi_l1", phi_l1);
+
+      // Lepton 2 (l2)
+      int charge_l2 = l2_ptr->charge();
+      auto lep2_p4 = l2_ptr->polarP4();
       lep2_p4.SetM(l2_ptr->mass());
+      float pt_l2 = lep2_p4.Pt();
+      float eta_l2 = lep2_p4.Eta();
+      float phi_l2 = lep2_p4.Phi();
+      cand.addUserInt("charge_l2", charge_l2);
+      cand.addUserFloat("pt_l2", pt_l2);
+      cand.addUserFloat("eta_l2", eta_l2);
+      cand.addUserFloat("phi_l2", phi_l2);
 
+      // Track 1 (trk1)
+      int charge_trk1 = trk1_ptr->charge();
       auto trk1_p4 = trk1_ptr->polarP4();
-      auto trk2_p4 = trk2_ptr->polarP4();
+      float pt_trk1 = trk1_p4.Pt();
+      float eta_trk1 = trk1_p4.Eta();
+      float phi_trk1 = trk1_p4.Phi();
+      cand.addUserInt("charge_trk1", charge_trk1);
+      cand.addUserFloat("pt_trk1", pt_trk1);
+      cand.addUserFloat("eta_trk1", eta_trk1);
+      cand.addUserFloat("phi_trk1", phi_trk1);
 
+      // Track 2 (trk2)
+      int charge_trk2 = trk2_ptr->charge();
+      auto trk2_p4 = trk2_ptr->polarP4();
+      float pt_trk2 = trk2_p4.Pt();
+      float eta_trk2 = trk2_p4.Eta();
+      float phi_trk2 = trk2_p4.Phi();
+      cand.addUserInt("charge_trk2", charge_trk2);
+      cand.addUserFloat("pt_trk2", pt_trk2);
+      cand.addUserFloat("eta_trk2", eta_trk2);
+      cand.addUserFloat("phi_trk2", phi_trk2);
+
+      // Candidato B (K+ K-)
       trk1_p4.SetM(bph::K_MASS);
       trk2_p4.SetM(bph::K_MASS);
       cand.addUserFloat("unfitted_B_mass_KK", (trk1_p4 + trk2_p4 + lep1_p4 + lep2_p4).M());
+      // Candidato B (k+ pi-)
       trk1_p4.SetM(bph::K_MASS);
       trk2_p4.SetM(bph::PI_MASS);
       cand.addUserFloat("unfitted_B_mass_Kpi", (trk1_p4 + trk2_p4 + lep1_p4 + lep2_p4).M());
+      // Candidato B bar (K- pi+)
       trk2_p4.SetM(bph::K_MASS);
       trk1_p4.SetM(bph::PI_MASS);
       cand.addUserFloat("unfitted_B_mass_piK", (trk1_p4 + trk2_p4 + lep1_p4 + lep2_p4).M());
@@ -225,11 +263,8 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
       cand.addUserFloat("fitted_ditrack_mass_Kpi", (fitter_Kpi.daughter_p4(2) + fitter_Kpi.daughter_p4(3)).mass());
       cand.addUserFloat("fitted_ditrack_mass_piK", (fitter_piK.daughter_p4(2) + fitter_piK.daughter_p4(3)).mass());
       cand.addUserFloat("fitted_massErr_KK", sqrt(fitter.fitted_candidate().kinematicParametersError().matrix()(6, 6)));
-      cand.addUserFloat("fitted_massErr_Kpi",
-                        sqrt(fitter_Kpi.fitted_candidate().kinematicParametersError().matrix()(6, 6)));
-      cand.addUserFloat("fitted_massErr_piK",
-                        sqrt(fitter_piK.fitted_candidate().kinematicParametersError().matrix()(6, 6)));
-
+      cand.addUserFloat("fitted_massErr_Kpi", sqrt(fitter_Kpi.fitted_candidate().kinematicParametersError().matrix()(6, 6)));
+      cand.addUserFloat("fitted_massErr_piK", sqrt(fitter_piK.fitted_candidate().kinematicParametersError().matrix()(6, 6)));
       cand.addUserFloat("fitted_mll", (fitter.daughter_p4(0) + fitter.daughter_p4(1)).mass());
 
       auto fit_p4 = fitter.fitted_p4();
@@ -243,7 +278,6 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
 
       // other vars
       cand.addUserFloat("cos_theta_2D", bph::cos_theta_2D(fitter, *beamspot, cand.p4()));
-
       cand.addUserFloat("fitted_cos_theta_2D", bph::cos_theta_2D(fitter, *beamspot, fit_p4));
 
       auto lxy = bph::l_xy(fitter, *beamspot);
@@ -281,6 +315,43 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
       }
       cand.addUserFloat("dca", DCAB0BS);
       cand.addUserFloat("dcaErr", DCAB0BSErr);
+
+      TrajectoryStateClosestToPoint theDCAXBS_l1 = leptons_ttracks->at(l1_idx).trajectoryStateClosestToPoint(
+          GlobalPoint(beamspot->position().x(), beamspot->position().y(), beamspot->position().z()));
+      if (theDCAXBS_l1.isValid()) {
+        double dca_l1 = theDCAXBS_l1.perigeeParameters().transverseImpactParameter();
+        double dcaErr_l1 = theDCAXBS_l1.perigeeError().transverseImpactParameterError();
+        cand.addUserFloat("l1_dca", dca_l1);
+        cand.addUserFloat("l1_dcaErr", dcaErr_l1);
+      }
+
+      TrajectoryStateClosestToPoint theDCAXBS_l2 = leptons_ttracks->at(l2_idx).trajectoryStateClosestToPoint(
+          GlobalPoint(beamspot->position().x(), beamspot->position().y(), beamspot->position().z()));
+      if (theDCAXBS_l2.isValid()) {
+        double dca_l2 = theDCAXBS_l2.perigeeParameters().transverseImpactParameter();
+        double dcaErr_l2 = theDCAXBS_l2.perigeeError().transverseImpactParameterError();
+        cand.addUserFloat("l2_dca", dca_l2);
+        cand.addUserFloat("l2_dcaErr", dcaErr_l2);
+      }
+
+      TrajectoryStateClosestToPoint theDCAXBS_trk1 = ditracks_ttracks->at(trk1_idx).trajectoryStateClosestToPoint(
+          GlobalPoint(beamspot->position().x(), beamspot->position().y(), beamspot->position().z()));
+      if (theDCAXBS_trk1.isValid()) {
+        double dca_trk1 = theDCAXBS_trk1.perigeeParameters().transverseImpactParameter();
+        double dcaErr_trk1 = theDCAXBS_trk1.perigeeError().transverseImpactParameterError();
+        cand.addUserFloat("trk1_dca", dca_trk1);
+        cand.addUserFloat("trk1_dcaErr", dcaErr_trk1);
+      }
+
+      TrajectoryStateClosestToPoint theDCAXBS_trk2 = ditracks_ttracks->at(trk2_idx).trajectoryStateClosestToPoint(
+          GlobalPoint(beamspot->position().x(), beamspot->position().y(), beamspot->position().z()));
+      if (theDCAXBS_trk2.isValid()) {
+        double dca_trk2 = theDCAXBS_trk2.perigeeParameters().transverseImpactParameter();
+        double dcaErr_trk2 = theDCAXBS_trk2.perigeeError().transverseImpactParameterError();
+        cand.addUserFloat("trk2_dca", dca_trk2);
+        cand.addUserFloat("trk2_dcaErr", dcaErr_trk2);
+        cand.addUserFloat("trk2_dcaSig", dca_trk2 / dcaErr_trk2);
+      }
 
       cand.addUserFloat("vtx_x", cand.vx());
       cand.addUserFloat("vtx_y", cand.vy());

@@ -107,6 +107,39 @@ BToTrkTrkMuMuTable = cms.EDProducer(
         constraint_mass_piK = Var("userFloat('constraint_mass_piK')", float, doc = "B mass with piK mass hypothesis after the dimuon mass constraint"),
         constraint_massErr_piK  = Var("userFloat('constraint_massErr_piK')", float, doc = "mass uncertainty for the piK mass hypothesis of the dimuon mass constraint", precision=12),
         constraint_mll  = Var("userFloat('constraint_mll')", float, doc = "dimuon mass after the dimuon mass constraint"),
+
+        pt_l1 = Var("userFloat('pt_l1')", float, doc = "pT of the positive lepton"),
+        eta_l1 = Var("userFloat('eta_l1')", float, doc = "pseudorapidity of the positive lepton"),
+        phi_l1 = Var("userFloat('phi_l1')", float, doc = "phi of the positive lepton"),
+        charge_l1 = Var("userInt('charge_l1')", int, doc = "charge of the first lepton"),
+
+        pt_l2 = Var("userFloat('pt_l2')", float, doc = "pT of the negative lepton"),
+        eta_l2 = Var("userFloat('eta_l2')", float, doc = "pseudorapidity of the negative lepton"),
+        phi_l2 = Var("userFloat('phi_l2')", float, doc = "phi of the negative lepton"),
+        charge_l2 = Var("userInt('charge_l2')", int, doc = "charge of the second lepton"),
+
+        pt_trk1 = Var("userFloat('pt_trk1')", float, doc = "pT of the first track"),
+        eta_trk1 = Var("userFloat('eta_trk1')", float, doc = "pseudorapidity of the first track"),
+        phi_trk1 = Var("userFloat('phi_trk1')", float, doc = "phi of the first track"),
+        charge_trk1 = Var("userInt('charge_trk1')", float, doc = "charge of the first track"),
+
+        pt_trk2 = Var("userFloat('pt_trk2')", float, doc = "pT of the second track"),
+        eta_trk2 = Var("userFloat('eta_trk2')", float, doc = "pseudorapidity of the second track"),
+        phi_trk2 = Var("userFloat('phi_trk2')", float, doc = "phi of the second track"),
+        charge_trk2 = Var("userInt('charge_trk2')", float, doc = "charge of the second track"),
+
+        unfitted_B_mass_KK   = Var("userFloat('unfitted_B_mass_KK')", float, doc = "unfitted B mass KK hypothesis"),
+        unfitted_B_mass_Kpi  = Var("userFloat('unfitted_B_mass_Kpi')", float, doc = "unfitted B mass Kpi hypothesis"),
+        unfitted_B_mass_piK  = Var("userFloat('unfitted_B_mass_piK')", float, doc = "unfitted B mass piK hypothesis"),
+
+        l1_dca = Var("userFloat('l1_dca')", float, doc = "positive lepton DCA wrt beamspot"),
+        l1_dcaErr = Var("userFloat('l1_dcaErr')", float, doc = "positive lepton DCA uncertainty wrt beamspot"),
+        l2_dca = Var("userFloat('l2_dca')", float, doc = "negative lepton DCA wrt beamspot"),
+        l2_dcaErr = Var("userFloat('l2_dcaErr')", float, doc = "negative lepton DCA uncertainty wrt beamspot"),
+        trk1_dca = Var("userFloat('trk1_dca')", float, doc = "positive track DCA wrt beamspot"),
+        trk1_dcaErr = Var("userFloat('trk1_dcaErr')", float, doc = "positive track DCA uncertainty wrt beamspot"),
+        trk2_dca = Var("userFloat('trk2_dca')", float, doc = "negative track DCA wrt beamspot"),
+        trk2_dcaErr = Var("userFloat('trk2_dcaErr')", float, doc = "negative track DCA uncertainty wrt beamspot")
     )
 )
 
