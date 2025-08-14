@@ -353,6 +353,61 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
         cand.addUserFloat("trk2_dcaSig", dca_trk2 / dcaErr_trk2);
       }
 
+      TLorentzVector fittedB_Kpi, fittedMuonPlus_Kpi, fittedMuonMinus_Kpi, fittedKaon_Kpi, fittedPion_Kpi;
+      fittedMuonPlus_Kpi.SetPxPyPzE(fitter_Kpi.daughter_p4(0).px(), fitter_Kpi.daughter_p4(0).py(), fitter_Kpi.daughter_p4(0).pz(), fitter_Kpi.daughter_p4(0).E());
+      fittedMuonMinus_Kpi.SetPxPyPzE(fitter_Kpi.daughter_p4(1).px(), fitter_Kpi.daughter_p4(1).py(), fitter_Kpi.daughter_p4(1).pz(), fitter_Kpi.daughter_p4(1).E());
+      fittedKaon_Kpi.SetPxPyPzE(fitter_Kpi.daughter_p4(2).px(), fitter_Kpi.daughter_p4(2).py(), fitter_Kpi.daughter_p4(2).pz(), fitter_Kpi.daughter_p4(2).E());
+      fittedPion_Kpi.SetPxPyPzE(fitter_Kpi.daughter_p4(3).px(), fitter_Kpi.daughter_p4(3).py(), fitter_Kpi.daughter_p4(3).pz(), fitter_Kpi.daughter_p4(3).E());
+      
+      fittedB_Kpi.SetPxPyPzE(fitter_Kpi.fitted_p4().px(), fitter_Kpi.fitted_p4().py(), fitter_Kpi.fitted_p4().pz(), fitter_Kpi.fitted_p4().E());
+      TLorentzVector fittedDimuon_Kpi = fittedMuonPlus_Kpi + fittedMuonMinus_Kpi;
+      TLorentzVector fittedKstar_Kpi = fittedKaon_Kpi + fittedPion_Kpi;
+
+      TVector3 boostToDimuonRestFrame = fittedDimuon_Kpi.BoostVector();
+      TLorentzVector muPlusInDimuonRestFrame = fittedMuonPlus_Kpi;
+      muPlusInDimuonRestFrame.Boost(-boostToDimuonRestFrame);
+      TLorentzVector bInDimuonRestFrame = fittedB_Kpi;
+      bInDimuonRestFrame.Boost(-boostToDimuonRestFrame);
+
+      TVector3 mu_dir_in_dimuon_rf = muPlusInDimuonRestFrame.Vect();
+      TVector3 B_dir_in_dimuon_rf = bInDimuonRestFrame.Vect();
+
+      double cos_theta_l = mu_dir_in_dimuon_rf.Dot(-B_dir_in_dimuon_rf) / (mu_dir_in_dimuon_rf.Mag() * B_dir_in_dimuon_rf.Mag());
+      cand.addUserFloat("cos_theta_l", cos_theta_l);
+      
+      TVector3 boostToKstarRestFrame = fittedKstar_Kpi.BoostVector();
+      TLorentzVector kaonInKstarRestFrame = fittedKaon_Kpi;
+      kaonInKstarRestFrame.Boost(-boostToKstarRestFrame);
+      TLorentzVector bInKstarRestFrame = fittedB_Kpi;
+      bInKstarRestFrame.Boost(-boostToKstarRestFrame);
+
+      TVector3 kaon_dir_in_kstar_rf = kaonInKstarRestFrame.Vect();
+      TVector3 B_dir_in_kstar_rf = bInKstarRestFrame.Vect();
+
+      double cos_theta_K = kaon_dir_in_kstar_rf.Dot(-B_dir_in_kstar_rf) / (kaon_dir_in_kstar_rf.Mag() * B_dir_in_kstar_rf.Mag());
+      cand.addUserFloat("cos_theta_k", cos_theta_K);
+
+      TVector3 boostToB_rf = fittedB_Kpi.BoostVector();
+
+      TLorentzVector muPlus_in_B_rf = fittedMuonPlus_Kpi;
+      muPlus_in_B_rf.Boost(-boostToB_rf);
+      TLorentzVector muMinus_in_B_rf = fittedMuonMinus_Kpi;
+      muMinus_in_B_rf.Boost(-boostToB_rf);
+
+      TLorentzVector kaon_in_B_rf = fittedKaon_Kpi;
+      kaon_in_B_rf.Boost(-boostToB_rf);
+      TLorentzVector pion_in_B_rf = fittedPion_Kpi;
+      pion_in_B_rf.Boost(-boostToB_rf);
+
+      TVector3 MuMuPlane = muPlus_in_B_rf.Vect().Cross(muMinus_in_B_rf.Vect());
+      TVector3 KstPlane = kaon_in_B_rf.Vect().Cross(pion_in_B_rf.Vect());
+
+      double phi_angle = MuMuPlane.Angle(KstPlane);
+      if (MuMuPlane.Cross(KstPlane).Dot(fittedB_Kpi.Vect()) < 0) {
+          phi_angle = -phi_angle;
+      }
+      cand.addUserFloat("phi_angle", phi_angle);
+
       cand.addUserFloat("vtx_x", cand.vx());
       cand.addUserFloat("vtx_y", cand.vy());
       cand.addUserFloat("vtx_z", cand.vz());
