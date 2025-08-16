@@ -116,6 +116,18 @@ void BToTrkTrkLLBuilder::produce(edm::StreamID, edm::Event &evt, edm::EventSetup
       int l1_idx = ll_ptr->userInt("l1_idx");
       int l2_idx = ll_ptr->userInt("l2_idx");
 
+      if (l1_ptr->charge() * l2_ptr->charge() >= 0) continue; 
+      if (l1_ptr->charge() < 0) {
+          std::swap(l1_ptr, l2_ptr);
+          std::swap(l1_idx, l2_idx);
+      }
+
+      if (trk1_ptr->charge() * trk2_ptr->charge() >= 0) continue; 
+      if (trk1_ptr->charge() < 0) {
+          std::swap(trk1_ptr, trk2_ptr);
+          std::swap(trk1_idx, trk2_idx);
+      }
+
       // B0 candidate
       pat::CompositeCandidate cand;
       cand.setP4(ll_ptr->p4() + ditracks_ptr->p4());
