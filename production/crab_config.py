@@ -1,7 +1,7 @@
 from CRABClient.UserUtilities import config
 config = config()
 
-config.General.requestName = 'BPH_NanoAOD_Data_Run2022C'
+config.General.requestName = 'BPH_NanoAOD_Data_Run2022C_1'
 config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
 config.General.transferLogs = True
