@@ -55,7 +55,7 @@ Você será solicitado a inserir sua senha do Grid. Uma mensagem de sucesso conf
 
 ---
 
-## Produção de NanoAOD para Dados Reais (Data)
+## Produção de NanoAOD para Dados
 
 ### Passo 4.A: Gerar o Arquivo de Configuração Python
 
@@ -83,12 +83,12 @@ Este comando criará o arquivo `BPH_Data_cfg.py`.
 
 ### Passo 4.B: Editar o Arquivo de Configuração
 
-Antes de executar, é necessário fazer uma pequena edição manual no arquivo `BPH_Data_cfg.py`.
+Antes de executar, é necessário fazer uma pequena edição manual no arquivo `taus_cff.py`.
 
-* **Remova** ou comente (com `#`) a seguinte linha referente à identificação de taus, pois ela não é suportada nesta versão do CMSSW:
+* **Remova** a seguinte linha referente à identificação de taus, pois ela não é suportada nesta versão do CMSSW:
 
     ```python
-    # Em BPH_Data_cfg.py, encontre e remova esta linha:
+    # Em taus_cff.py, encontre e remova esta linha:
     tauID('byVVVLooseDeepTau2018v2p5VSjet'),
     ```
 
@@ -137,8 +137,8 @@ Para reduzir ainda mais o tamanho do arquivo final, você pode remover coleçõe
 
 ```python
 # Adicione estas linhas ao BPH_MC_cfg.py
-process.NANOAODSIMoutput.outputCommands.append('drop *_*_*_L1')
-process.NANOAODSIMoutput.outputCommands.append('drop *_*_*_HLT')
+process.NANOAODoutput.outputCommands.append('drop *_*_*_L1')
+process.NANOAODoutput.outputCommands.append('drop *_*_*_HLT')
 ```
 
 ### Passo 5.C: Executar o Job de MC
