@@ -9,15 +9,10 @@ This guide provides a step-by-step setup for producing customized B-Physics Nano
 ### 1. Create the CMSSW area
 
 ```bash
-cmsrel CMSSW_15_1_X_2025-07-31-2300
-cd CMSSW_15_1_X_2025-07-31-2300/src/
+cmsrel CMSSW_15_1_0_pre5
+cd CMSSW_15_1_0_pre5/src/
 cmsenv
 ```
-
-> ⚠️ Note: This developer area is created for non-production architecture `el9_amd64_gcc12`.  
-> Production architecture for this release is `el8_amd64_gcc12`.  
-> Also, multi-microarchitecture support is **not** enabled.
-
 ---
 
 ### 2. Clone the repository with the analysis scripts
@@ -45,19 +40,7 @@ The `-j8` flag allows parallel compilation with 8 threads. You can adjust it bas
 ### 4. Generate the python configuration for NanoAOD production (example with Run2024C data)
 
 ```bash
-cmsDriver.py \
-  --conditions 140X_dataRun3_Prompt_v4 \
-  --datatier NANOAOD \
-  --era Run3,run3_nanoAOD_pre142X \
-  --eventcontent NANOAOD \
-  --filein root://cms-xrd-global.cern.ch//store/data/Run2024C/ParkingDoubleMuonLowMass0/MINIAOD/PromptReco-v1/000/379/415/00000/b40397b5-61c6-4887-8f4e-025e8ca925ee.root \
-  --fileout file:BPH_test_data.root \
-  --nThreads 4 \
-  -n -1 \
-  --no_exec \
-  --python_filename BPH_test.py \
-  --scenario pp \
-  --step NANO:@BPH
+cmsDriver.py --conditions 140X_dataRun3_Prompt_v4 --datatier NANOAOD --era Run3,run3_nanoAOD_pre142X --eventcontent NANOAOD --filein root://cms-xrd-global.cern.ch//store/data/Run2022C/ParkingDoubleMuonLowMass0/MINIAOD/PromptReco-v1/000/355/872/00000/fc32f8ac-8ba1-498d-96b2-1925a4c825fa.root --fileout file:BPH_test_data.root --nThreads 4 -n -1 --no_exec --python_filename BPH_test.py --scenario pp --step NANO:@BPH
 ```
 
 This creates the configuration file `BPH_test.py`, which defines the NanoAOD workflow.
@@ -67,7 +50,7 @@ This creates the configuration file `BPH_test.py`, which defines the NanoAOD wor
 ### 5. Initialize proxy to access the GRID
 
 ```bash
-voms-proxy-init --rfc --voms cms
+voms-proxy-init --voms cms
 ```
 
 > After entering your GRID password, you should see confirmation like:
