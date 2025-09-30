@@ -1,0 +1,32 @@
+DEBUG 2025-09-16 17:50:28.256 UTC: 	 CRAB Client version: v3.250820
+DEBUG 2025-09-16 17:50:28.256 UTC: 	 Running on: Linux lxplus956.cern.ch 5.14.0-570.39.1.el9_6.x86_64 #1 SMP PREEMPT_DYNAMIC Sat Aug 23 04:30:05 EDT 2025 x86_64 x86_64 x86_64 GNU/Linux
+DEBUG 2025-09-16 17:50:28.256 UTC: 	 Not using Singularity
+DEBUG 2025-09-16 17:50:28.256 UTC: 	 Operating System: Red Hat Enterprise Linux 9.6 (Plow)
+DEBUG 2025-09-16 17:50:28.256 UTC: 	 Executing command: 'checkusername'
+DEBUG 2025-09-16 17:50:28.257 UTC: 	 Found CRAB cache file /afs/cern.ch/user/t/tdeandra/.crab3
+DEBUG 2025-09-16 17:50:28.257 UTC: 	 Checking credentials
+DEBUG 2025-09-16 17:50:28.257 UTC: 	 Found proxy file /tmp/x509up_u174047
+DEBUG 2025-09-16 17:50:28.257 UTC: 	 Making sure it has proper VOMS extension
+DEBUG 2025-09-16 17:50:28.257 UTC: 	 Executing command :
+ voms-proxy-info --vo --file /tmp/x509up_u174047
+DEBUG 2025-09-16 17:50:28.298 UTC: 	 output : cms
+
+ error: 
+ retcode : 0
+DEBUG 2025-09-16 17:50:28.298 UTC: 	 Getting proxy life time left
+DEBUG 2025-09-16 17:50:28.298 UTC: 	 Executing command :
+ voms-proxy-info --actimeleft --timeleft --file /tmp/x509up_u174047
+DEBUG 2025-09-16 17:50:28.333 UTC: 	 output : 32390
+32389
+
+ error: 
+ retcode : 0
+DEBUG 2025-09-16 17:50:28.333 UTC: 	 Proxy valid for 08:59:49 hours
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Command use: checkusername
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Options use: []
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Instance is None
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Server base url is None
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Retrieving username ...
+DEBUG 2025-09-16 17:50:28.334 UTC: 	 Retrieving username from CRIC...
+DEBUG 2025-09-16 17:50:29.524 UTC: 	 username is tdeandra
+INFO 2025-09-16 17:50:29.524 UTC: 	 Username is: tdeandra

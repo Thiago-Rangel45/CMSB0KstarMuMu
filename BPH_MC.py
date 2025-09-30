@@ -29,22 +29,23 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/18b9cc80-a289-4243-8285-b7574064c253.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/25abc25e-04a5-4511-96ae-9e06b7fd7654.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/27fd440b-5776-4fc6-8908-36a62402c048.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/5301fff0-4e96-486b-87a9-196fb564a810.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/5b815577-42a0-49d6-ba5b-596fb9d5c426.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/6dc0e913-956b-4216-af66-a60d84c18d84.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/70baa8b4-a90d-4d58-a19a-d2fba4137ae3.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/7963ef8c-5044-4b18-884c-a14cebe8f502.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/8beab378-4479-498e-a3d6-0bd8a3dcf50e.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/9aac028c-665a-4c61-a862-2d407f46d187.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/a173007d-b9ba-41cf-9cb4-96726b98f40e.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/d97ddbc3-afdd-402d-aa94-4b08bb94a53b.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/ea4beaa1-f728-443e-aece-4a1f929bb25a.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/ecdeac72-a6fc-4eef-82d2-ba1c48a51671.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/f65f7c00-c071-4e1d-adcb-19987563487b.root',
-        'root://cms-xrd-global.cern.ch//store/mc/Run3Summer22MiniAODv3/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_124X_mcRun3_2022_realistic_v12-v2/2810000/f69ed475-eeb0-430e-b2a3-9e8035f2708d.root'),
+    fileNames = cms.untracked.vstring('/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2520000/790ab392-1e36-4471-b63c-6b4f41b2db24.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2530000/2e9dba99-bd16-45ab-ba97-3ba833da2025.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2530000/3137600b-9553-4322-a8cb-02e935118e10.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2530000/8605db4f-46dd-462e-a54e-2532a1184b88.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2530000/d2298dc2-bc0f-4438-b81f-ccd7e9c35c25.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2530000/dd5a0141-ae5d-4e5d-b230-a3b40d55434e.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/2540000/738cd115-7066-40e2-97b9-df9af278916e.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/1a903a7b-9283-4e95-8318-a873db537417.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/3152adf8-7887-4a9c-889c-6808ad4fab3c.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/35fd1606-9377-4214-8818-d102c4cf968d.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/5a1e5814-2ef2-43b8-995c-0e750b056a6b.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/64fe945b-c1f6-438c-a5be-f5e947619c55.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/82a5537d-272d-42f8-b4f2-072938e58bf1.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/cbdc6258-79bf-4d27-b086-11ac193102e6.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/30000/fbaab031-2b87-472d-ab6b-b56f0da186a5.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/40000/a06f1583-c9bd-4297-904e-0a718c8ac880.root',
+        '/store/mc/Run3Summer22MiniAODv4/BdToKstarMuMu_KplusPiminusFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/MINIAODSIM/rndm_130X_mcRun3_2022_realistic_v5-v2/60000/ef4addd4-4089-4719-915c-6a83ce205ade.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -96,7 +97,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         dataTier = cms.untracked.string('NANOAOD'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('/eos/user/t/tdeandra/BPH_NANO_124.root'),
+    fileName = cms.untracked.string('/eos/user/t/tdeandra/BPH_NANO_130.root'),
     outputCommands = process.NANOAODSIMEventContent.outputCommands
 )
 
