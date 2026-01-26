@@ -96,17 +96,45 @@ BToTrkTrkMuMuTable = cms.EDProducer(
         trk1_svip2d_err = Var("userFloat('trk1_svip2d_err')", float, doc = "uncertainty of 2D IP of the leading track wrt the dimuon vertex", precision=12),
         trk2_svip2d     = Var("userFloat('trk2_svip2d')", float, doc = "2D IP of the subleading track wrt the dimuon vertex", precision=12),
         trk2_svip2d_err = Var("userFloat('trk2_svip2d_err')", float, doc = "uncertainty of 2D IP of the subleading track wrt the dimuon vertex", precision=12),
-        constraint_sv_prob     = Var("userFloat('constraint_sv_prob')", float, doc = "B vertex probability after the dimuon mass constraint", precision=12),
-        constraint_pt   = Var("userFloat('constraint_pt')", float, doc = "B pt after the dimuon mass constraint", precision=12),
-        constraint_eta  = Var("userFloat('constraint_eta')", float, doc = "B eta after the dimuon mass constraint", precision=12),
-        constraint_phi  = Var("userFloat('constraint_phi')", float, doc = "B phi after the dimuon mass constraint", precision=12),
-        constraint_mass_KK = Var("userFloat('constraint_mass_KK')", float, doc = "B mass with KK mass hypothesis after the dimuon mass constraint"),
-        constraint_massErr_KK  = Var("userFloat('constraint_massErr_KK')", float, doc = "mass uncertainty for the KK mass hypothesis of the dimuon mass constraint", precision=12),
-        constraint_mass_Kpi = Var("userFloat('constraint_mass_Kpi')", float, doc = "B mass with Kpi mass hypothesis after the dimuon mass constraint"),
-        constraint_massErr_Kpi  = Var("userFloat('constraint_massErr_Kpi')", float, doc = "mass uncertainty for the Kpi mass hypothesis of the dimuon mass constraint", precision=12),
-        constraint_mass_piK = Var("userFloat('constraint_mass_piK')", float, doc = "B mass with piK mass hypothesis after the dimuon mass constraint"),
-        constraint_massErr_piK  = Var("userFloat('constraint_massErr_piK')", float, doc = "mass uncertainty for the piK mass hypothesis of the dimuon mass constraint", precision=12),
-        constraint_mll  = Var("userFloat('constraint_mll')", float, doc = "dimuon mass after the dimuon mass constraint"),
+
+        pt_l1 = Var("userFloat('pt_l1')", float, doc = "pT of the positive lepton"),
+        eta_l1 = Var("userFloat('eta_l1')", float, doc = "pseudorapidity of the positive lepton"),
+        phi_l1 = Var("userFloat('phi_l1')", float, doc = "phi of the positive lepton"),
+        charge_l1 = Var("userInt('charge_l1')", int, doc = "charge of the first lepton"),
+
+        pt_l2 = Var("userFloat('pt_l2')", float, doc = "pT of the negative lepton"),
+        eta_l2 = Var("userFloat('eta_l2')", float, doc = "pseudorapidity of the negative lepton"),
+        phi_l2 = Var("userFloat('phi_l2')", float, doc = "phi of the negative lepton"),
+        charge_l2 = Var("userInt('charge_l2')", int, doc = "charge of the second lepton"),
+
+        pt_trk1 = Var("userFloat('pt_trk1')", float, doc = "pT of the first track"),
+        eta_trk1 = Var("userFloat('eta_trk1')", float, doc = "pseudorapidity of the first track"),
+        phi_trk1 = Var("userFloat('phi_trk1')", float, doc = "phi of the first track"),
+        charge_trk1 = Var("userInt('charge_trk1')", float, doc = "charge of the first track"),
+
+        pt_trk2 = Var("userFloat('pt_trk2')", float, doc = "pT of the second track"),
+        eta_trk2 = Var("userFloat('eta_trk2')", float, doc = "pseudorapidity of the second track"),
+        phi_trk2 = Var("userFloat('phi_trk2')", float, doc = "phi of the second track"),
+        charge_trk2 = Var("userInt('charge_trk2')", float, doc = "charge of the second track"),
+
+        unfitted_B_mass_KK   = Var("userFloat('unfitted_B_mass_KK')", float, doc = "unfitted B mass KK hypothesis"),
+        unfitted_B_mass_Kpi  = Var("userFloat('unfitted_B_mass_Kpi')", float, doc = "unfitted B mass Kpi hypothesis"),
+        unfitted_B_mass_piK  = Var("userFloat('unfitted_B_mass_piK')", float, doc = "unfitted B mass piK hypothesis"),
+
+        l1_dca = Var("userFloat('l1_dca')", float, doc = "positive lepton DCA wrt beamspot"),
+        l1_dcaErr = Var("userFloat('l1_dcaErr')", float, doc = "positive lepton DCA uncertainty wrt beamspot"),
+        l2_dca = Var("userFloat('l2_dca')", float, doc = "negative lepton DCA wrt beamspot"),
+        l2_dcaErr = Var("userFloat('l2_dcaErr')", float, doc = "negative lepton DCA uncertainty wrt beamspot"),
+        trk1_dca = Var("userFloat('trk1_dca')", float, doc = "positive track DCA wrt beamspot"),
+        trk1_dcaErr = Var("userFloat('trk1_dcaErr')", float, doc = "positive track DCA uncertainty wrt beamspot"),
+        trk2_dca = Var("userFloat('trk2_dca')", float, doc = "negative track DCA wrt beamspot"),
+        trk2_dcaErr = Var("userFloat('trk2_dcaErr')", float, doc = "negative track DCA uncertainty wrt beamspot"),
+
+        sum_iso04 = Var("userFloat('sum_iso04')", float, doc = 'sum of the final state particle relative isolations'),
+
+        cos_theta_l = Var("userFloat('cos_theta_l')", float, doc = "cossine of the angle between the direction of the positive lepton and the direction opposite that of the B0"),
+        cos_theta_k = Var("userFloat('cos_theta_k')", float, doc = "cossine of the angle between the direction of the kaon and the direction opposite that of the B0"),
+        phi_angle = Var("userFloat('phi_angle')", float, doc = "angle between the plane containing the muons and the plane containing the kaon and the pion from the K star decay")
     )
 )
 
