@@ -1,0 +1,47 @@
+universe = vanilla
+executable = job.sh
+
+# Logs organizados (crie a pasta logs/ antes!)
+output = logs/job_$(ClusterId)_$(ProcId).out
+error  = logs/job_$(ClusterId)_$(ProcId).err
+log    = logs/job_$(ClusterId).log
+
+# Recursos solicitados
+request_cpus   = 1
+request_memory = 2500
+request_disk   = 2000
++JobFlavour    = "workday"
+
+# Proxy VOMS (necessário para ler do grid/escrever no EOS)
+x509userproxy = my_proxy
+
+# Transfere o script python e a lista de inputs específica do job
+transfer_input_files = universal_skim.py, $(filename)
+
+# Argumentos para o job.sh:
+arguments = $(filename) $(output_name) $(mode)
+
+# ==========================================
+# 1. BLOCO DE DADOS
+# ==========================================
+mode = data
+output_name = Data_Skim_$(ClusterId)_$(ProcId).root
+# Lê os arquivos da pasta file_lists_data/
+queue filename from file_lists_data/list_files.txt
+
+# ==========================================
+# 2. BLOCO DE MONTE CARLO (Genérico)
+# ==========================================
+mode = mc
+output_name = MC_Skim_$(ClusterId)_$(ProcId).root
+# Lê os arquivos da pasta file_lists_mc/
+queue filename from file_lists_mc/list_files.txt
+
+# ==========================================
+# 3. BLOCO DE MONTE CARLO (JPsi)
+# ==========================================
+# Define um modo novo para salvar em pasta separada no EOS
+mode = mc_jpsi
+output_name = MC_JPsi_Skim_$(ClusterId)_$(ProcId).root
+# Lê os arquivos da nova pasta gerada
+queue filename from file_lists_mc_jpsi/list_files.txt
