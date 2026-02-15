@@ -1,47 +1,50 @@
 universe = vanilla
 executable = job.sh
 
-# Logs organizados (crie a pasta logs/ antes!)
+# [cite_start]Logs organizados (Certifique-se de que a pasta logs/ existe no seu diretório atual) [cite: 1]
 output = logs/job_$(ClusterId)_$(ProcId).out
 error  = logs/job_$(ClusterId)_$(ProcId).err
 log    = logs/job_$(ClusterId).log
 
-# Recursos solicitados
+# [cite_start]Recursos solicitados [cite: 1]
 request_cpus   = 1
 request_memory = 2500
 request_disk   = 2000
 +JobFlavour    = "workday"
 
-# Proxy VOMS (necessário para ler do grid/escrever no EOS)
+# [cite_start]Proxy VOMS (necessário para ler do grid/escrever no EOS) [cite: 1]
 x509userproxy = my_proxy
 
-# Transfere o script python e a lista de inputs específica do job
+# [cite_start]Transfere o script python e a lista de inputs específica do job [cite: 1]
 transfer_input_files = universal_skim.py, $(filename)
 
-# Argumentos para o job.sh:
+# [cite_start]Argumentos para o job.sh: $1=lista, $2=nome_saida, $3=modo [cite: 1, 2]
 arguments = $(filename) $(output_name) $(mode)
 
 # ==========================================
 # 1. BLOCO DE DADOS
 # ==========================================
-mode = data
+mode = dados
 output_name = Data_Skim_$(ClusterId)_$(ProcId).root
-# Lê os arquivos da pasta file_lists_data/
 queue filename from file_lists_data/list_files.txt
 
 # ==========================================
-# 2. BLOCO DE MONTE CARLO (Genérico)
+# 2. BLOCO DE MONTE CARLO (Non-Resonant)
 # ==========================================
-mode = mc
+mode = nonressonat
 output_name = MC_Skim_$(ClusterId)_$(ProcId).root
-# Lê os arquivos da pasta file_lists_mc/
 queue filename from file_lists_mc/list_files.txt
 
 # ==========================================
 # 3. BLOCO DE MONTE CARLO (JPsi)
 # ==========================================
-# Define um modo novo para salvar em pasta separada no EOS
-mode = mc_jpsi
+mode = jpsi
 output_name = MC_JPsi_Skim_$(ClusterId)_$(ProcId).root
-# Lê os arquivos da nova pasta gerada
 queue filename from file_lists_mc_jpsi/list_files.txt
+
+# ==========================================
+# 4. BLOCO DE MONTE CARLO (Bu)
+# ==========================================
+mode = bu
+output_name = MC_Bu_Skim_$(ClusterId)_$(ProcId).root
+queue filename from file_lists_mc_bu/list_files.txt
