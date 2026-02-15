@@ -27,6 +27,10 @@ MC_JPSI_DIRS = [
     "/cms/store/user/tdeandra/BdToJpsiKstar_BMuonFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251219_000717/0000/"
 ]
 
+MC_Bu_DIRS = [
+    "/cms/store/user/tdeandra/BuToJpsiK_JpsiToMuMu_MuFilter_Pt-2_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/260127_232047/0000/"
+]
+
 # Quantos arquivos ROOT processar por Job do Condor?
 FILES_PER_JOB = 50
 
@@ -120,14 +124,19 @@ if __name__ == "__main__":
     data_files = get_files_from_grid(DATA_DIRS)
     create_job_lists(data_files, "file_lists_data")
     
-    # 2. Processar MC (Antigo)
-    print("\n>>> DATASET: MONTE CARLO (Genérico)")
+    # 2. Processar MC (Non Ressoant)
+    print("\n>>> DATASET: MONTE CARLO (Non Ressonant)")
     mc_files = get_files_from_grid(MC_DIRS)
     create_job_lists(mc_files, "file_lists_mc")
 
-    # 3. Processar NOVO MC (JPsi)
-    print("\n>>> DATASET: MONTE CARLO (JPsi)")
+    # 3. Processar MC (BToJPsiK*)
+    print("\n>>> DATASET: MONTE CARLO (BToJPsiK*)")
     mc_jpsi_files = get_files_from_grid(MC_JPSI_DIRS)
     create_job_lists(mc_jpsi_files, "file_lists_mc_jpsi")
+
+    # 4. Processar MC (BuToJpsiK+)
+    print("\n>>> DATASET: MONTE CARLO (Bu)")
+    mc_bu_files = get_files_from_grid(MC_Bu_DIRS)
+    create_job_lists(mc_bu_files, "file_lists_mc_bu")
     
     print("\nProcesso concluído. Agora você pode rodar 'condor_submit condor.sub'.")
