@@ -1,0 +1,9 @@
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_91.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_92.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_93.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_94.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_95.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_96.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_97.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_98.root
+root://xrootd2.hepgrid.uerj.br:1094//store/user/tdeandra/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251121_015314/0000/BPH_test_mc_99.root
