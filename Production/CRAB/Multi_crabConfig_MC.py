@@ -17,7 +17,7 @@ if __name__ == '__main__':
     config.General.workArea     = 'crab_projects_CMSSW_15_1_0_MC'
     config.General.transferLogs = True
     config.JobType.pluginName   = 'Analysis'
-    config.JobType.psetName     = '../BPH_MC.py' 
+    config.JobType.psetName     = '../../BPH_MC_cfg.py' 
     config.JobType.numCores     = 4
     config.JobType.maxMemoryMB  = 4000
     config.JobType.sendExternalFolder = True
@@ -38,21 +38,21 @@ if __name__ == '__main__':
             print("ClientException:", cle) 
 
     # ============ JOB 1 ============
-    config.General.requestName = 'BPH_NanoAOD_MC_BdToJpsiKstar'
+    config.General.requestName = 'BPH_NanoAOD_MC_BdtoJpsiKstar'
     config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/BdToJpsiKstar_BMuonFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
+    config.Data.inputDataset   = '/BdtoJpsiKstar_Jpsito2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
     config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdToJpsiKstar'
+    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoJpsiKstar'
     p1 = Process(target=submit, args=(config,))
     p1.start()
     p1.join()
 
     # ============ JOB 2 ============
-    config.General.requestName = 'BPH_NanoAOD_MC_BdToKstar2Mu'
+    config.General.requestName = 'BPH_NanoAOD_MC_BdtoKstarPsi2s'
     config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
+    config.Data.inputDataset   = '/BdtoKstarPsi2s_Psi2sto2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
     config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdToKstar2Mu'
+    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoKstarPsi2s'
     p2 = Process(target=submit, args=(config,))
     p2.start()
     p2.join()
