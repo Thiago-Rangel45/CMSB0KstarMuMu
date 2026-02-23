@@ -24,7 +24,11 @@ MC_DIRS = [
 
 # 3. NOVO Diretório de MC (JPsi Kstar)
 MC_JPSI_DIRS = [
-    "/cms/store/user/tdeandra/BdToJpsiKstar_BMuonFilter_SoftQCDnonD_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_Run2022C_MC/251219_000717/0000/"
+    "/cms/store/user/tdeandra/BPH_NanoAOD_MC/BdtoJpsiKstar_Jpsito2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_MC_BdtoJpsiKstar/260215_155759/0000/"
+]
+
+MC_PSI2S_DIRS = [
+    "/cms/store/user/tdeandra/BPH_NanoAOD_MC/BdtoKstarPsi2s_Psi2sto2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/BPH_NanoAOD_MC_BdtoKstarPsi2s/260215_155810/0000/"
 ]
 
 MC_Bu_DIRS = [
@@ -134,7 +138,12 @@ if __name__ == "__main__":
     mc_jpsi_files = get_files_from_grid(MC_JPSI_DIRS)
     create_job_lists(mc_jpsi_files, "file_lists_mc_jpsi")
 
-    # 4. Processar MC (BuToJpsiK+)
+    # 4. Processar MC (BdToK*Psi2s)
+    print("\n>>> DATASET: MONTE CARLO (BdToK*Psi2s)")
+    mc_psi2s_files = get_files_from_grid(MC_PSI2S_DIRS)
+    create_job_lists(mc_psi2s_files, "file_lists_mc_psi2s")
+
+    # 5. Processar MC (BuToJpsiK+)
     print("\n>>> DATASET: MONTE CARLO (Bu)")
     mc_bu_files = get_files_from_grid(MC_Bu_DIRS)
     create_job_lists(mc_bu_files, "file_lists_mc_bu")
