@@ -26,7 +26,6 @@ def get_cut_string():
     BToTrkTrkMuMu_fit_trk1_pt > 0.8 &&
     abs(BToTrkTrkMuMu_fit_trk1_eta) < 2.4 &&
 
-    HLT_DoubleMu4_LowMass_Displaced == 1 &&
     Muon_softMvaRun3_l1_idx > 0.74 &&
     Muon_softMvaRun3_l2_idx > 0.74 &&
 
