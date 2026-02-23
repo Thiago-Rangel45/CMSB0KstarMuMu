@@ -18,6 +18,8 @@ def main():
         FILE_PATTERN = "Data_Skim_*.root"
     elif args.mode == "jpsi":
         FILE_PATTERN = "MC_JPsi_Skim_*.root"
+    elif args.mode == "psi2s":
+        FILE_PATTERN = "MC_Psi2S_Skim_*.root"
     elif args.mode == "bu":
         FILE_PATTERN = "MC_Bu_Skim_*.root"
     else:

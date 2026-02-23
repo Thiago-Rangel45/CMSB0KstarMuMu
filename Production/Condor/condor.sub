@@ -43,7 +43,14 @@ output_name = MC_JPsi_Skim_$(ClusterId)_$(ProcId).root
 queue filename from file_lists_mc_jpsi/list_files.txt
 
 # ==========================================
-# 4. BLOCO DE MONTE CARLO (Bu)
+# 4. BLOCO DE MONTE CARLO (Psi2S)
+# ==========================================
+mode = psi2s
+output_name = MC_Psi2S_Skim_$(ClusterId)_$(ProcId).root
+queue filename from file_lists_mc_psi2s/list_files.txt
+
+# ==========================================
+# 5. BLOCO DE MONTE CARLO (Bu)
 # ==========================================
 mode = bu
 output_name = MC_Bu_Skim_$(ClusterId)_$(ProcId).root
