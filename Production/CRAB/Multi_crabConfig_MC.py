@@ -57,6 +57,15 @@ if __name__ == '__main__':
     p2.start()
     p2.join()
 
+    config.General.requestName = 'BPH_NanoAOD_MC_BdtoKstarMuMu'
+    config.Data.unitsPerJob    = 40
+    config.Data.inputDataset   = '/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-FilterFix_130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
+    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
+    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoKstarMuMu'
+    p3 = Process(target=submit, args=(config,))
+    p3.start()
+    p3.join()
+
     print("\n" + "="*60)
     print("SCRIPT MC FINALIZADO")
     print("="*60)

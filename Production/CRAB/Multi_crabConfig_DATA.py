@@ -17,16 +17,16 @@ if __name__ == '__main__':
     config.General.workArea     = 'crab_projects_CMSSW_15_1_0'
     config.General.transferLogs = True
     config.JobType.pluginName   = 'Analysis'
-    config.JobType.psetName     = '../BPH_Data_cfg.py' 
+    #config.JobType.psetName     = '../BPH_Data_cfg.py' 
+    config.JobType.psetName = '/afs/cern.ch/user/t/tdeandra/CMSSW_15_1_0/src/BPH_Data_cfg.py'
     config.JobType.numCores     = 4
     config.JobType.maxMemoryMB  = 4000
     config.JobType.sendExternalFolder = True
     config.Data.inputDBS        = 'global'    
     config.Data.splitting       = 'LumiBased'
     config.Data.publication     = False
-    config.Site.storageSite     = 'T3_CH_CERNBOX'
-    config.Data.lumiMask        = 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_eraC_355862_357482_Golden.json'
     config.Data.allowNonValidInputDataset = True
+    config.Site.storageSite     = 'T2_BR_UERJ' 
 
     # --- Whitelist necessária quando ignoreLocality = True ---
     config.Data.ignoreLocality  = True
@@ -40,25 +40,42 @@ if __name__ == '__main__':
         except ClientException as cle:
             print("ClientException:", cle) 
 
-    # ============ JOB 1 ============
-    config.General.requestName = 'BPH_NanoAOD_Run2022C_LowMass1'
-    config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/ParkingDoubleMuonLowMass1/Run2022C-PromptReco-v1/MINIAOD'
-    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_Data/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_Run2022C_Data_LowMass1'
-    p1 = Process(target=submit, args=(config,)) # Mudei para p1 para clareza
-    p1.start()
-    p1.join()
+    base_url = 'https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/'
+    lumi_masks = {
+        'C': base_url + 'Cert_Collisions2022_eraC_355862_357482_Golden.json',
+        'D': base_url + 'Cert_Collisions2022_eraD_357538_357900_Golden.json',
+        'E': base_url + 'Cert_Collisions2022_eraE_359022_360331_Golden.json',
+        'F': base_url + 'Cert_Collisions2022_eraF_360390_362167_Golden.json',
+        'G': base_url + 'Cert_Collisions2022_eraG_362433_362760_Golden.json'
+    }
 
-    # ============ JOB 2 ============
-    config.General.requestName = 'BPH_NanoAOD_Run2022C_LowMass2'
-    config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/ParkingDoubleMuonLowMass2/Run2022C-PromptReco-v1/MINIAOD'
-    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_Data/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_Run2022C_Data_LowMass2'
-    p2 = Process(target=submit, args=(config,)) # Mudei para p2
-    p2.start()
-    p2.join()
+    reco_versions = {
+        'C': 'v1',
+        'D': 'v2',
+        'E': 'v1',
+        'F': 'v1',
+        'G': 'v1'
+    }
+    eras = ['C', 'D', 'E', 'F', 'G']
+    
+    for era in eras:
+        for ds in range(8):
+            
+            version = reco_versions[era]            
+            input_ds = f'/ParkingDoubleMuonLowMass{ds}/Run2022{era}-PromptReco-{version}/MINIAOD'
+            
+            config.General.requestName = f'BPH_Run22{era}_LowMass{ds}'
+            config.Data.inputDataset   = input_ds
+            config.Data.unitsPerJob    = 40            
+            config.Data.lumiMask       = lumi_masks[era]            
+            config.Data.outLFNDirBase  = f'/store/user/tdeandra/BPH_NanoAOD_Data/Run2022{era}/'
+            config.Data.outputDatasetTag = f'NanoAOD_LowMass{ds}'
+            
+            print(f"Submetendo Era {era} | Dataset {ds} | Versão: {version} | JSON: {lumi_masks[era].split('/')[-1]}")
+            
+            p = Process(target=submit, args=(config,))
+            p.start()
+            p.join() 
 
     print("\n" + "="*60)
     print("SCRIPT FINALIZADO")
