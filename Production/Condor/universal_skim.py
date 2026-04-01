@@ -1,174 +1,158 @@
-#!/usr/bin/env python3
-
-import ROOT
-import sys
+import uproot
+import awkward as ak
 import argparse
-
-# Multithreading (ajuste o número se quiser fixar)
-ROOT.EnableImplicitMT()
-ROOT.gROOT.SetBatch(True)
-
-
-def get_cut_string():
-    return """
-    MuMu_pt_idx > 6.9 &&
-    MuMu_svprob_idx > 0.1 &&
-    (MuMu_l_xy_idx / MuMu_l_xy_unc_idx) > 3 &&
-    MuMu_fit_cos2D_idx > 0.9 &&
-
-    abs(BToTrkTrkMuMu_fit_ditrack_mass_Kpi - 0.896) <
-    abs(BToTrkTrkMuMu_fit_ditrack_mass_piK - 0.896) &&
-
-    BToTrkTrkMuMu_fit_l1_pt > 4 &&
-    abs(BToTrkTrkMuMu_fit_l1_eta) < 2.4 &&
-    BToTrkTrkMuMu_fit_l2_pt > 4 &&
-    abs(BToTrkTrkMuMu_fit_l2_eta) < 2.4 &&
-    BToTrkTrkMuMu_fit_trk1_pt > 0.8 &&
-    abs(BToTrkTrkMuMu_fit_trk1_eta) < 2.4 &&
-
-    Muon_softMvaRun3_l1_idx > 0.74 &&
-    Muon_softMvaRun3_l2_idx > 0.74 &&
-
-    (BToTrkTrkMuMu_fit_ditrack_mass_KK > 1.035)
-    """
-
+import sys
+import os
+import traceback
 
 def main():
-
-    parser = argparse.ArgumentParser()
-    # Alterado para --input_list para coincidir com seu job.sh
-    parser.add_argument("--input_list", required=True,
-                        help="Arquivo ROOT ou txt com lista de ROOTs")
-    parser.add_argument("--output", required=True)
-    # Removido o choices=["data", "mc"] para aceitar "dados", "bu", "jpsi", etc.
-    parser.add_argument("--process_mode", required=True)
+    # =========================================================
+    # 1. CONFIGURAÇÃO DE PARÂMETROS PARA O CONDOR (argparse)
+    # =========================================================
+    parser = argparse.ArgumentParser(description="Script de filtragem de NanoAOD para o Condor")
+    parser.add_argument("--input_list", required=True, help="Arquivo .txt com lista de arquivos ROOT ou caminho direto")
+    parser.add_argument("--output", required=True, help="Nome do arquivo ROOT de saída")
+    parser.add_argument("--process_mode", required=True, choices=["data", "mc"], help="'data' para dados reais, 'mc' para simulação")
     args = parser.parse_args()
 
-    print("Inicializando RDataFrame...")
+    is_mc = (args.process_mode.lower() == "mc")
 
-    # ===============================
-    # Leitura de múltiplos arquivos
-    # ===============================
+    files_to_process = []
     if args.input_list.endswith(".txt"):
         with open(args.input_list) as f:
-            file_list = [
-                line.strip()
-                for line in f
-                if line.strip() and not line.startswith("#")
-            ]
-
-        if len(file_list) == 0:
-            print("ERRO: arquivo txt está vazio.")
-            sys.exit(1)
-
-        print(f"{len(file_list)} arquivos encontrados no txt.")
-        df = ROOT.RDataFrame("Events", file_list)
+            for line in f:
+                link = line.strip()
+                if link and not link.startswith("#"):
+                    files_to_process.append(link)
     else:
-        df = ROOT.RDataFrame("Events", args.input_list)
+        files_to_process = [args.input_list]
 
-    # ===============================
-    # Pegando todas as colunas
-    # ===============================
-    all_columns = list(df.GetColumnNames())
+    if not files_to_process:
+        print("ERRO: Lista de arquivos vazia.")
+        sys.exit(1)
 
-    # ===============================
-    # Criando colunas indexadas MuMu
-    # ===============================
-    mumu_columns = [col for col in all_columns if col.startswith("MuMu_")]
-    for col in mumu_columns:
-        df = df.Define(f"{col}_idx", f"ROOT::VecOps::Take({col}, BToTrkTrkMuMu_ll_idx)")
+    try:
+        print(f"Modo: {args.process_mode.upper()} | Arquivos a processar: {len(files_to_process)}")
+        print(f"Iniciando leitura e filtragem em chunks...")
 
-    df = df.Define("Muon_softMvaRun3_l1_idx", "ROOT::VecOps::Take(Muon_softMvaRun3, BToTrkTrkMuMu_l1_idx)")
-    df = df.Define("Muon_softMvaRun3_l2_idx", "ROOT::VecOps::Take(Muon_softMvaRun3, BToTrkTrkMuMu_l2_idx)")
-    df = df.Define("pass_cut", get_cut_string())
+        prefixes = ("BToTrkTrkMuMu_", "DiTrack_", "BPH", "Track_", "MuMu_", "HLT_", "L1_")
+        
+        first_file_tree = f"{files_to_process[0]}:Events"
+        with uproot.open(first_file_tree) as test_tree:
+            available_branches = test_tree.keys()
+        
+        keep_cols_set = {col for col in available_branches if col.startswith(prefixes) or col in ["run", "event", "luminosityBlock"]}
+        if is_mc:
+            keep_cols_set.update({col for col in available_branches if col.startswith(("Pileup_", "genWeight", "GenPart_", "BPHGenPart_"))})
+        
+        keep_cols = list(keep_cols_set)
+        compression = uproot.LZMA(4) 
+        paths_with_tree = [f"{path}:Events" for path in files_to_process]
+        
+        # =========================================================
+        # 2. PROCESSAMENTO EM CHUNKS (iterate)
+        # =========================================================
+        with uproot.recreate(args.output, compression=compression) as out_file:
+            is_first_chunk = True
+            
+            for batch in uproot.iterate(paths_with_tree, filter_name=keep_cols, step_size="100 MB"):
+                
+                ll_idx = batch["BToTrkTrkMuMu_ll_idx"]
+                l1_idx = batch["BToTrkTrkMuMu_l1_idx"]
+                l2_idx = batch["BToTrkTrkMuMu_l2_idx"]
+                trk1_idx = batch["BToTrkTrkMuMu_trk1_idx"]
+                trk2_idx = batch["BToTrkTrkMuMu_trk2_idx"]
 
-    # ===============================
-    # BToTrkTrkMuMu
-    # ===============================
-    BToTrk_columns = [col for col in all_columns if col.startswith("BToTrkTrkMuMu_")]
-    for item in BToTrk_columns:
-        df = df.Define(f"{item}_good", f"{item}[pass_cut]")
+                mask_mumu = (
+                    (batch["MuMu_pt"][ll_idx] > 6.9) &
+                    (batch["MuMu_svprob"][ll_idx] > 0.1) &
+                    (batch["MuMu_l_xy"][ll_idx] / batch["MuMu_l_xy_unc"][ll_idx] > 3.0) &
+                    (batch["MuMu_fit_cos2D"][ll_idx] > 0.9)
+                )
 
-    # ===============================
-    # DiTrack
-    # ===============================
-    DiTrack_columns = [col for col in all_columns if col.startswith("DiTrack_")]
-    for item in DiTrack_columns:
-        df = df.Define(f"{item}_good", f"{item}[pass_cut]")
+                mask_b0 = (
+                    (batch["BToTrkTrkMuMu_fit_l1_pt"] > 4.0) &
+                    (batch["BToTrkTrkMuMu_fit_l2_pt"] > 4.0) &
+                    (batch["BToTrkTrkMuMu_svprob"] > 0.01) &
+                    (batch["BToTrkTrkMuMu_fit_trk1_pt"] > 0.8) &
+                    (batch["BToTrkTrkMuMu_fit_trk2_pt"] > 0.8)
+                )
 
-    # ===============================
-    # MuMu filtrado
-    # ===============================
-    for col in mumu_columns:
-        df = df.Define(f"{col}_good", f"{col}_idx[pass_cut]")
+                final_mask = mask_mumu & mask_b0
 
-    # ===============================
-    # Muons
-    # ===============================
-    Muon_columns = [col for col in all_columns if col.startswith("Muon_")]
-    for col in Muon_columns:
-        df = df.Define(f"{col}_l1", f"ROOT::VecOps::Take({col}, BToTrkTrkMuMu_l1_idx)")
-        df = df.Define(f"{col}_l2", f"ROOT::VecOps::Take({col}, BToTrkTrkMuMu_l2_idx)")
-        df = df.Define(f"{col}_l1_good", f"{col}_l1[pass_cut]")
-        df = df.Define(f"{col}_l2_good", f"{col}_l2[pass_cut]")
+                dict_filtrado = {}
 
-    # ===============================
-    # Tracks
-    # ===============================
-    Track_columns = [col for col in all_columns if col.startswith("Track_")]
-    for col in Track_columns:
-        df = df.Define(f"{col}_t1", f"ROOT::VecOps::Take({col}, BToTrkTrkMuMu_trk1_idx)")
-        df = df.Define(f"{col}_t2", f"ROOT::VecOps::Take({col}, BToTrkTrkMuMu_trk2_idx)")
-        df = df.Define(f"{col}_trk1_good", f"{col}_t1[pass_cut]")
-        df = df.Define(f"{col}_trk2_good", f"{col}_t2[pass_cut]")
+                # 1. Global
+                for branch in ["run", "event", "luminosityBlock"]:
+                    if branch in batch.fields:
+                        dict_filtrado[branch] = batch[branch]
 
-    # ===============================
-    # Trigger
-    # ===============================
-    Trigger_columns = [col for col in all_columns if col.startswith("HLT_DoubleMu4_")]
+                # 2. B0 e DiTrack
+                for branch in [b for b in batch.fields if b.startswith(("BToTrkTrkMuMu_", "DiTrack_"))]:
+                    dict_filtrado[branch] = batch[branch][final_mask]
 
-    # ===============================
-    # MC-only branches
-    # ===============================
-    # AJUSTE AQUI: Se for diferente de "dados", carrega as colunas de MC
-    if args.process_mode != "dados":
-        Pileup_columns = [col for col in all_columns if col.startswith("Pileup_")]
-        GenPart_columns = [col for col in all_columns if "GenPart" in col]
-    else:
-        Pileup_columns = []
-        GenPart_columns = []
+                # 3. MuMu
+                for branch in [b for b in batch.fields if b.startswith("MuMu_")]:
+                    dict_filtrado[branch] = batch[branch][ll_idx][final_mask]
 
-    # ===============================
-    # Mantém apenas eventos com candidato
-    # ===============================
-    df = df.Filter("BToTrkTrkMuMu_fit_ditrack_mass_Kpi_good.size() > 0")
+                # 4. Track -> Trk1 e Trk2
+                for branch in [b for b in batch.fields if b.startswith("Track_")]:
+                    dict_filtrado[branch.replace("Track_", "Trk1_")] = batch[branch][trk1_idx][final_mask]
+                    dict_filtrado[branch.replace("Track_", "Trk2_")] = batch[branch][trk2_idx][final_mask]
 
-    final_columns = list(df.GetColumnNames())
-    features_to_save = [col for col in final_columns if col.endswith("_good")]
-    features_to_save += Trigger_columns
+                # 5. BPHMuon -> Muon1 e Muon2
+                for branch in [b for b in batch.fields if b.startswith("BPHMuon_")]:
+                    dict_filtrado[branch.replace("BPHMuon_", "BPH_1Muon_")] = batch[branch][l1_idx][final_mask]
+                    dict_filtrado[branch.replace("BPHMuon_", "BPH_2Muon_")] = batch[branch][l2_idx][final_mask]
 
-    for g in ["run", "luminosityBlock", "event"]:
-        if g in final_columns:
-            features_to_save.append(g)
+                # 6. Triggers e Pesos MC (Broadcast)
+                target_branches = [b for b in batch.fields if b.startswith("HLT_DoubleMu4_")]
+                if is_mc:
+                    target_branches += [b for b in batch.fields if b.startswith(("Pileup_", "genWeight"))]
+                
+                for branch in target_branches:
+                    expanded = ak.broadcast_arrays(batch[branch], final_mask)[0]    
+                    dict_filtrado[branch] = expanded[final_mask]
 
-    features_to_save += Pileup_columns
-    features_to_save += GenPart_columns
+                # --- CORREÇÃO DE TIPO (UINT32 -> INT32) ---
+                # Essencial para compatibilidade com NumPy 1.x na LXPLUS
+                for branch in dict_filtrado:
+                    if "uint32" in str(ak.type(dict_filtrado[branch])):
+                        dict_filtrado[branch] = ak.values_astype(dict_filtrado[branch], "int32")
 
-    # Remove duplicatas
-    features_to_save = list(set(features_to_save))
+                # Agrupamento e Máscara de Evento
+                B_candidates_clean = ak.zip(dict_filtrado)
+                event_mask = ak.num(B_candidates_clean["BToTrkTrkMuMu_fit_pt"]) > 0
+                
+                if not ak.any(event_mask):
+                    continue
+                
+                B_candidates_validos = B_candidates_clean[event_mask]
+                output_dict = {f: B_candidates_validos[f] for f in B_candidates_validos.fields}
+                
+                if is_mc:
+                    gen_branches = [b for b in batch.fields if b.startswith("BPHGenPart_")]
+                    for branch in gen_branches:
+                        output_dict[branch] = batch[branch][event_mask]
 
-    # ===============================
-    # Snapshot
-    # ===============================
-    opts = ROOT.RDF.RSnapshotOptions()
-    opts.fCompressionAlgorithm = 4
-    opts.fCompressionLevel = 4
+                # =========================================================
+                # 3. SALVANDO O CHUNK COM TIPAGEM EXPLÍCITA
+                # =========================================================
+                if is_first_chunk:
+                    # CORREÇÃO: Passando o esquema de tipos explicitamente para o mktree
+                    branch_types = {name: ak.type(array) for name, array in output_dict.items()}
+                    out_file.mktree("Events", branch_types)
+                    out_file["Events"].extend(output_dict)
+                    is_first_chunk = False
+                else:
+                    out_file["Events"].extend(output_dict)
 
-    print(f"Salvando output em: {args.output}")
-    df.Snapshot("tree_ML", args.output, features_to_save, opts)
+        print(f"Processo concluído com sucesso! Salvo em: {args.output} 🚀")
 
-    print("Concluído.")
-
+    except Exception as e:
+        print(f"Erro fatal: {e}")
+        traceback.print_exc()
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
