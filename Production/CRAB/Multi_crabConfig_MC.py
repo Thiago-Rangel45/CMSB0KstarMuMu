@@ -1,71 +1,73 @@
+#!/usr/bin/env python3
+import os
+from multiprocessing import Process
+from CRABAPI.RawCommand import crabCommand
+from CRABClient.ClientExceptions import ClientException
+from CRABClient.UserUtilities import config
+
+try:
+    from http.client import HTTPException
+except ImportError:
+    from httplib import HTTPException
+
+def submit(config):
+    try:
+        print(f"==> Submetendo: {config.General.requestName}")
+        crabCommand('submit', config=config)
+    except HTTPException as hte:
+        print(f"Erro HTTP na submissão: {hte.headers}")
+    except ClientException as cle:
+        print(f"Erro no Cliente CRAB: {cle}")
+
 if __name__ == '__main__':
 
-    from CRABAPI.RawCommand import crabCommand
-    from CRABClient.ClientExceptions import ClientException
-    
-    try:
-        from http.client import HTTPException
-    except ImportError:
-        from httplib import HTTPException
-
-    from CRABClient.UserUtilities import config
-    config = config()
-    
-    from multiprocessing import Process
+    conf = config()
 
     # ================= CONFIGURAÇÃO GERAL =================
-    config.General.workArea     = 'crab_projects_CMSSW_15_1_0_MC'
-    config.General.transferLogs = True
-    config.JobType.pluginName   = 'Analysis'
-    config.JobType.psetName     = '../../BPH_MC_cfg.py' 
-    config.JobType.numCores     = 4
-    config.JobType.maxMemoryMB  = 4000
-    config.JobType.sendExternalFolder = True
-    config.Data.inputDBS        = 'global'    
-    config.Data.splitting       = 'LumiBased'
-    config.Data.publication     = False
-    config.Site.storageSite     = 'T2_BR_UERJ'
+    conf.General.workArea     = 'crab_projects_CMSSW_15_1_0_MC'
+    conf.General.transferLogs = True
     
-    # --- Para MC não usamos lumiMask nem ignoreLocality ---
-    config.Data.ignoreLocality  = False
+    conf.JobType.pluginName   = 'Analysis'
+    conf.JobType.psetName     = '../../BPH_MC_cfg.py' 
+    conf.JobType.numCores     = 4
+    conf.JobType.maxMemoryMB  = 4000
+    conf.JobType.sendExternalFolder = True
     
-    def submit(config):
-        try:
-            res = crabCommand('submit', config = config)
-        except HTTPException as hte:
-            print("HTTPException:", hte.headers)
-        except ClientException as cle:
-            print("ClientException:", cle) 
+    conf.Data.inputDBS        = 'global'    
+    conf.Data.splitting       = 'LumiBased'
+    conf.Data.unitsPerJob     = 40
+    conf.Data.publication     = False
+    conf.Data.ignoreLocality  = False
+    conf.Data.outLFNDirBase   = '/store/user/tdeandra/BPH_NanoAOD_MC/'
+    
+    conf.Site.storageSite     = 'T2_BR_UERJ'
 
-    # ============ JOB 1 ============
-    config.General.requestName = 'BPH_NanoAOD_MC_BdtoJpsiKstar'
-    config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/BdtoJpsiKstar_Jpsito2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
-    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoJpsiKstar'
-    p1 = Process(target=submit, args=(config,))
-    p1.start()
-    p1.join()
+    datasets = {
+        # --- Canal: Bd -> Jpsi K* ---
+        'BdtoJpsiKstar_2022':   '/BdtoJpsiKstar_Jpsito2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM',
+        'BdtoJpsiKstar_2022EE': '/BdtoJpsiKstar_Jpsito2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM',
+        
+        # --- Canal: Bd -> K* Psi(2S) ---
+        'BdtoKstarPsi2s_2022':   '/BdtoKstarPsi2s_Psi2sto2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM',
+        'BdtoKstarPsi2s_2022EE': '/BdtoKstarPsi2s_Psi2sto2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22EEMiniAODv4-130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM',
+        
+        # --- Canal: Bd -> K* MuMu (Versões FilterFix) ---
+        'BdtoKstarMuMu_2022':   '/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-FilterFix_130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM',
+        'BdtoKstarMuMu_2022EE': '/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22EEMiniAODv4-FilterFix_130X_mcRun3_2022_realistic_postEE_v6-v2/MINIAODSIM',
+    }
 
-    # ============ JOB 2 ============
-    config.General.requestName = 'BPH_NanoAOD_MC_BdtoKstarPsi2s'
-    config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/BdtoKstarPsi2s_Psi2sto2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
-    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoKstarPsi2s'
-    p2 = Process(target=submit, args=(config,))
-    p2.start()
-    p2.join()
+    # ============ LOOP DE SUBMISSÃO ============
+    print(f"\nIniciando submissão de {len(datasets)} jobs...\n")
 
-    config.General.requestName = 'BPH_NanoAOD_MC_BdtoKstarMuMu'
-    config.Data.unitsPerJob    = 40
-    config.Data.inputDataset   = '/BdtoKstar2Mu_KstartoKPi_MuFilter_TuneCP5_13p6TeV_pythia8-evtgen/Run3Summer22MiniAODv4-FilterFix_130X_mcRun3_2022_realistic_v5-v2/MINIAODSIM'
-    config.Data.outLFNDirBase  = '/store/user/tdeandra/BPH_NanoAOD_MC/'
-    config.Data.outputDatasetTag = 'BPH_NanoAOD_MC_BdtoKstarMuMu'
-    p3 = Process(target=submit, args=(config,))
-    p3.start()
-    p3.join()
+    for nick, dset in datasets.items():
+        conf.General.requestName   = f"BPH_Nano_MC_{nick}"
+        conf.Data.inputDataset     = dset
+        conf.Data.outputDatasetTag = f"BPH_Nano_MC_{nick}"
+        
+        p = Process(target=submit, args=(conf,))
+        p.start()
+        p.join()
 
     print("\n" + "="*60)
-    print("SCRIPT MC FINALIZADO")
+    print("PROCESSO DE SUBMISSÃO CONCLUÍDO")
     print("="*60)
