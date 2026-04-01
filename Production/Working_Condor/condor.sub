@@ -1,0 +1,19 @@
+universe              = vanilla
+executable            = job.sh
+getenv                = True
+transfer_input_files  = universal_skim.py, my_proxy
+should_transfer_files = YES
+transfer_output_files = ""
+x509userproxy         = my_proxy
++JobFlavour           = "longlunch"
+
+max_materialize       = 100
+max_retries           = 3
+
+output                = logs/$(mode)/job_$(ProcId).out
+error                 = logs/$(mode)/job_$(ProcId).err
+log                   = logs/$(mode)/cluster.log
+arguments             = $(filename) Skim_$(ProcId).root $(mode)
+
+mode = mc_psi2s_2022EE
+queue filename from file_list/file_lists_mc_psi2s_2022EE/list_files.txt
