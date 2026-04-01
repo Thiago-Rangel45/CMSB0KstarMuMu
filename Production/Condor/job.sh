@@ -1,36 +1,37 @@
 #!/bin/bash
+# job.sh
 
-INPUT_LIST_FILE=$(basename "$1")
-OUTPUT_FILE=$2
-MODE=$3
+INPUT_URL="$1"   
+OUTPUT_NAME="$2"       
+MODE_FULL="$3"         
 
-echo "========== JOB START =========="
-echo "Host: $(hostname)"
-echo "Processing: $INPUT_LIST_FILE"
-echo "Mode: $MODE"
+echo "========== JOB START LOCAL T2_UERJ =========="
+echo "Input URL: $INPUT_URL"
 
-python3 universal_skim.py --input_list "$INPUT_LIST_FILE" \
-                          --output "$OUTPUT_FILE" \
-                          --process_mode "$MODE"
+cd $_CONDOR_SCRATCH_DIR
+export X509_USER_PROXY=$_CONDOR_SCRATCH_DIR/my_proxy
+export X509_CERT_DIR=/cvmfs/cms.cern.ch/grid/etc/grid-security/certificates
 
-PY_STATUS=$?
-if [ $PY_STATUS -ne 0 ]; then
-  echo "ERROR: universal_skim.py falhou."
-  exit 1
+[[ $MODE_FULL == *mc* ]] && INTERNAL_MODE="mc" || INTERNAL_MODE="data"
+
+
+python3 universal_skim.py --input_list "$INPUT_URL" \
+                          --output "$OUTPUT_NAME" \
+                          --process_mode "$INTERNAL_MODE"
+
+if [ $? -ne 0 ]; then 
+    echo "Erro no universal_skim.py"
+    exit 1
 fi
 
-echo "Copiando output para EOS na pasta específica: $MODE"
+EOS_DEST="root://eosuser.cern.ch//eos/user/t/tdeandra/skim_outputs/$MODE_FULL"
+echo "Enviando para o EOS CERN: $EOS_DEST"
+xrdcp -f --nopbar --streams 4 "$OUTPUT_NAME" "$EOS_DEST/$OUTPUT_NAME"
 
-EOS_BASE="root://eosuser.cern.ch//eos/user/t/tdeandra/skim_outputs"
-EOS_DEST="$EOS_BASE/$MODE/"
-
-xrdcp -f "$OUTPUT_FILE" "$EOS_DEST$OUTPUT_FILE"
-COPY_STATUS=$?
-
-if [ $COPY_STATUS -ne 0 ]; then
-  echo "ERROR: Falha no xrdcp para o EOS."
-  exit 2
+if [ $? -eq 0 ]; then 
+    rm -f "$OUTPUT_NAME"
+    echo "Sucesso e limpeza concluída."
+else 
+    echo "Erro no xrdcp para o EOS"
+    exit 2
 fi
-
-rm "$OUTPUT_FILE"
-echo "========== JOB END =========="

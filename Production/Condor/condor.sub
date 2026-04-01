@@ -1,57 +1,16 @@
-universe = vanilla
-executable = job.sh
+universe              = vanilla
+executable            = job.sh
+getenv                = True
+transfer_input_files  = universal_skim.py, my_proxy
+should_transfer_files = YES
+transfer_output_files = ""
+x509userproxy         = my_proxy
++JobFlavour           = "longlunch"
+max_materialize       = 100
+output                = logs/$(mode)/job_$(ProcId).out
+error                 = logs/$(mode)/job_$(ProcId).err
+log                   = logs/$(mode)/cluster.log
+arguments             = $(filename) Skim_$(ProcId).root $(mode)
 
-# [cite_start]Logs organizados (Certifique-se de que a pasta logs/ existe no seu diretório atual) [cite: 1]
-output = logs/job_$(ClusterId)_$(ProcId).out
-error  = logs/job_$(ClusterId)_$(ProcId).err
-log    = logs/job_$(ClusterId).log
-
-# [cite_start]Recursos solicitados [cite: 1]
-request_cpus   = 1
-request_memory = 2500
-request_disk   = 2000
-+JobFlavour    = "workday"
-
-# [cite_start]Proxy VOMS (necessário para ler do grid/escrever no EOS) [cite: 1]
-x509userproxy = my_proxy
-
-# [cite_start]Transfere o script python e a lista de inputs específica do job [cite: 1]
-transfer_input_files = universal_skim.py, $(filename)
-
-# [cite_start]Argumentos para o job.sh: $1=lista, $2=nome_saida, $3=modo [cite: 1, 2]
-arguments = $(filename) $(output_name) $(mode)
-
-# ==========================================
-# 1. BLOCO DE DADOS
-# ==========================================
-mode = dados
-output_name = Data_Skim_$(ClusterId)_$(ProcId).root
-queue filename from file_lists_data/list_files.txt
-
-# ==========================================
-# 2. BLOCO DE MONTE CARLO (Non-Resonant)
-# ==========================================
-mode = nonressonat
-output_name = MC_Skim_$(ClusterId)_$(ProcId).root
-queue filename from file_lists_mc/list_files.txt
-
-# ==========================================
-# 3. BLOCO DE MONTE CARLO (JPsi)
-# ==========================================
-mode = jpsi
-output_name = MC_JPsi_Skim_$(ClusterId)_$(ProcId).root
-queue filename from file_lists_mc_jpsi/list_files.txt
-
-# ==========================================
-# 4. BLOCO DE MONTE CARLO (Psi2S)
-# ==========================================
-mode = psi2s
-output_name = MC_Psi2S_Skim_$(ClusterId)_$(ProcId).root
-queue filename from file_lists_mc_psi2s/list_files.txt
-
-# ==========================================
-# 5. BLOCO DE MONTE CARLO (Bu)
-# ==========================================
-mode = bu
-output_name = MC_Bu_Skim_$(ClusterId)_$(ProcId).root
-queue filename from file_lists_mc_bu/list_files.txt
+mode = dados_Run2022C
+queue filename from file_lists_dados_Run2022C/list_files.txt
