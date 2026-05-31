@@ -28,7 +28,7 @@ process.maxEvents = cms.untracked.PSet(
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('/store/data/Run2022C/ParkingDoubleMuonLowMass0/MINIAOD/PromptReco-v1/000/355/862/00000/fc972444-ec73-42ea-897c-f2b918fbee7a.root'),
+    fileNames = cms.untracked.vstring('/store/data/Run2023C/ParkingDoubleMuonLowMass0/MINIAOD/PromptReco-v1/000/367/095/00000/02e1a3e3-ded6-4aa8-aa4c-38d1a5027958.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -80,7 +80,7 @@ process.NANOAODoutput = cms.OutputModule("NanoAODOutputModule",
         dataTier = cms.untracked.string('NANOAOD'),
         filterName = cms.untracked.string('')
     ),
-    fileName = cms.untracked.string('file:BPH_data_NANO.root'),
+    fileName = cms.untracked.string('file:/eos/user/t/tdeandra/data.root'),
     outputCommands = process.NANOAODEventContent.outputCommands
 )
 
@@ -88,7 +88,7 @@ process.NANOAODoutput = cms.OutputModule("NanoAODOutputModule",
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '140X_dataRun3_Prompt_v4', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '150X_dataRun3_v4', '') # for 2023: 150X_dataRun3_v4
 
 # Path and EndPath definitions
 process.nanoAOD_step = cms.Path(process.nanoSequence)
